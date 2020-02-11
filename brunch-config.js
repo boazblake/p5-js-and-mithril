@@ -1,6 +1,7 @@
 exports.files = {
   javascripts: {
     joinTo: {
+      // "modules.js": /^node_modules/,
       "vendor.js": /^(?!app)/, // Files that are not in `app` dir.
       "app.js": /^app/
     }
@@ -22,7 +23,10 @@ exports.modules = {
 }
 
 exports.npm = {
-  globals: { m: "mithril" }
+  globals: {
+    Stream: "mithril-stream/stream.js",
+    m: "mithril"
+  }
 }
 exports.paths = {
   public: "docs"

@@ -1,18 +1,21 @@
-import Stream from "mithril-stream"
 const range = (size) => [...Array(size).keys()]
+
 let root = document.getElementById("mithril-dom")
+
 let width = 600
 let height = 600
 let w = Stream(1400)
 let h = Stream(1000)
 let scl = Stream(20)
 let flying = Stream(0)
+let speed = Stream(-0.2)
 let colOff = Stream(0)
 let rowOff = Stream(0)
 let terrain = Stream([[]])
 let cols = range(w() / scl())
 let rows = range(h() / scl())
 let rotation = Stream(Math.PI / 3)
+
 const init = () =>
   new p5((sketch) => {
     sketch.preload = () => {}
@@ -33,7 +36,7 @@ const init = () =>
       sketch.translate(-w() / 2, -h() / 2)
       sketch.background("#81D4FA")
 
-      flying(flying() + 0.1)
+      flying(flying() + speed())
 
       rowOff(flying())
       rows.map((row) => {
@@ -93,21 +96,21 @@ const init = () =>
 const App = () => {
   return {
     oninit: init(),
-    view: ({ attrs: { w, h, scl, rotation } }) => {
+    view: ({ attrs: { w, speed, scl, rotation } }) => {
       return m(".mithril", [
         m(
           ".form-group",
           { style: { position: "absolute", top: "10px", color: "white" } },
           [
             m("input[type=range]", {
-              val: rotation(),
-              id: "rotateX",
+              val: scl(),
+              id: "scale",
               min: 0,
-              max: 3,
+              max: 30,
               step: 0.1,
-              oninput: (e) => rotation(e.target.value)
+              oninput: (e) => scl(e.target.value)
             }),
-            m("label", { for: "rotateX" }, `X-axis: ${rotation()}`)
+            m("label", { for: "scale" }, `scale: ${scl()}`)
           ]
         ),
 
@@ -116,14 +119,66 @@ const App = () => {
           { style: { position: "absolute", top: "30px", color: "white" } },
           [
             m("input[type=range]", {
-              val: scl(),
-              id: "rotateX",
-              min: 0,
-              max: 30,
+              val: speed(),
+              id: "speed",
+              min: -1,
+              max: 1,
               step: 0.1,
-              oninput: (e) => scl(e.target.value)
+              oninput: (e) => speed(Number(e.target.value))
             }),
-            m("label", { for: "rotateX" }, `scale: ${scl()}`)
+            m("label", { for: "speed" }, `speed: ${speed()}`)
+          ]
+        ),
+
+        m(
+          ".form-group",
+          {
+            style: {
+              position: "absolute",
+              top: "10px",
+              left: "50%",
+              color: "white"
+            }
+          },
+
+          [
+            m(
+              "button",
+              {
+                onclick: () => rotation(rotation() + 0.1),
+                id: "rotateXUp",
+                style: {
+                  fontSize: "50px"
+                }
+              },
+              "Up"
+            )
+          ]
+        ),
+
+        m(
+          ".form-group",
+          {
+            style: {
+              position: "absolute",
+              bottom: "10px",
+              left: "50%",
+              color: "white"
+            }
+          },
+
+          [
+            m(
+              "button",
+              {
+                onclick: () => rotation(rotation() - 0.1),
+                id: "rotateXDown",
+                style: {
+                  fontSize: "50px"
+                }
+              },
+              "Down"
+            )
           ]
         ),
 
@@ -147,7 +202,7 @@ const App = () => {
                   fontSize: "50px"
                 }
               },
-              "<"
+              "Left"
             )
           ]
         ),
@@ -172,7 +227,7 @@ const App = () => {
                   fontSize: "50px"
                 }
               },
-              ">"
+              "Right"
             )
           ]
         )
@@ -181,4 +236,4 @@ const App = () => {
   }
 }
 
-m.mount(root, { view: () => m(App, { w, h, scl, rotation }) })
+m.mount(root, { view: () => m(App, { w, h, scl, rotation, speed }) })
