@@ -1,1 +1,402 @@
-!function(){"use strict";var t="undefined"==typeof global?self:global;if("function"!=typeof t.require){var e={},r={},n={},i={}.hasOwnProperty,o=/^\.\.?(\/|$)/,l=function(t,e){for(var r,n=[],i=(o.test(e)?t+"/"+e:e).split("/"),l=0,u=i.length;l<u;l++)r=i[l],".."===r?n.pop():"."!==r&&""!==r&&n.push(r);return n.join("/")},u=function(t){return t.split("/").slice(0,-1).join("/")},a=function(e){return function(r){var n=l(u(e),r);return t.require(n,e)}},f=function(t,e){var n=g&&g.createHot(t),i={id:t,exports:{},hot:n};return r[t]=i,e(i.exports,a(t),i),i.exports},c=function(t){var e=n[t];return e&&t!==e?c(e):t},s=function(t,e){return c(l(u(t),e))},p=function(t,n){null==n&&(n="/");var o=c(t);if(i.call(r,o))return r[o].exports;if(i.call(e,o))return f(o,e[o]);throw new Error("Cannot find module '"+t+"' from '"+n+"'")};p.alias=function(t,e){n[e]=t};var m=/\.[^.\/]+$/,d=/\/index(\.[^\/]+)?$/,h=function(t){if(m.test(t)){var e=t.replace(m,"");i.call(n,e)&&n[e].replace(m,"")!==e+"/index"||(n[e]=t)}if(d.test(t)){var r=t.replace(d,"");i.call(n,r)||(n[r]=t)}};p.register=p.define=function(t,n){if(t&&"object"==typeof t)for(var o in t)i.call(t,o)&&p.register(o,t[o]);else e[t]=n,delete r[t],h(t)},p.list=function(){var t=[];for(var r in e)i.call(e,r)&&t.push(r);return t};var g=t._hmr&&new t._hmr(s,p,e,r);p._cache=r,p.hmr=g&&g.wrap,p.brunch=!0,t.require=p}}(),function(){"undefined"==typeof window?this:window;require.register("initialize.js",function(t,e,r){"use strict";document.addEventListener("DOMContentLoaded",function(){e("sketch")})}),require.register("model.js",function(t,e,r){"use strict";function n(t){if(Array.isArray(t)){for(var e=0,r=Array(t.length);e<t.length;e++)r[e]=t[e];return r}return Array.from(t)}Object.defineProperty(t,"__esModule",{value:!0});var i=function(t){return[].concat(n(Array(t).keys()))},o=600,l=600,u=20,a=1400,f=1e3,c=0,s=0,p=0,m=[[]],d=i(o/u),h=i(l/u);t.model={scl:u,w:a,h:f,flying:c,colOff:s,rowOff:p,terrain:m,cols:d,rows:h}}),require.register("sketch.js",function(t,e,r){"use strict";function n(t){if(Array.isArray(t)){for(var e=0,r=Array(t.length);e<t.length;e++)r[e]=t[e];return r}return Array.from(t)}var i=function(t){return[].concat(n(Array(t).keys()))},o=document.getElementById("mithril-dom"),l=600,u=600,a=Stream(1400),f=Stream(1e3),c=Stream(20),s=Stream(0),p=Stream(-.2),d=Stream(0),h=Stream(0),g=Stream([[]]),y=i(a()/c()),w=i(f()/c()),v=Stream(Math.PI/3),b=function(){return new p5(function(t){t.preload=function(){},t.setup=function(){t.createCanvas(l,u,t.WEBGL),w.map(function(t){y.map(function(e){g()[e]=[],g()[e][t]=0})})},t.draw=function(){t.rotateX(v()),t.translate(-a()/2,-f()/2),t.background("#81D4FA"),s(s()+p()),h(s()),w.map(function(e){d(0),y.map(function(r){g()[r][e]=t.map(t.noise(d(),h()),0,1,-100,100),d(d()+.21)}),h(h()+.21)}),w.map(function(e){t.beginShape(t.TRIANGLE_STRIP),y.map(function(r){t.vertex(r*c(),e*c(),g()[r][e]),t.vertex(r*c(),(e+1)*c(),g()[r][e+1]),g()[r][e]<-60?t.fill("#01579B"):g()[r][e]>-60&&g()[r][e]<-50?t.fill("#1B5E20"):g()[r][e]>-50&&g()[r][e]<-40?t.fill("#1B5E20"):g()[r][e]>-40&&g()[r][e]<-30?t.fill("#2E7D32"):g()[r][e]>-30&&g()[r][e]<-20?t.fill("#388E3C"):g()[r][e]>-20&&g()[r][e]<-10?t.fill("#43A047"):g()[r][e]>-10&&g()[r][e]<-0?t.fill("#4CAF50"):g()[r][e]>-0&&g()[r][e]<10?t.fill("#66BB6A"):g()[r][e]>10&&g()[r][e]<20?t.fill("#81C784"):g()[r][e]>20&&g()[r][e]<30?t.fill("#2ecc71"):g()[r][e]>30&&g()[r][e]<40?t.fill("#A5D6A7"):g()[r][e]>40&&g()[r][e]<50?t.fill("#C8E6C9"):g()[r][e]>50&&g()[r][e]<100&&t.fill("#ecf0f1")}),t.endShape(),m.redraw()})}})},x=function(){return{oninit:b(),view:function(t){var e=t.attrs,r=e.w,n=e.speed,i=e.scl,o=e.rotation;return m(".mithril",[m(".form-group",{style:{position:"absolute",top:"10px",color:"white"}},[m("input[type=range]",{val:i(),id:"scale",min:0,max:30,step:.1,oninput:function(t){return i(t.target.value)}}),m("label",{"for":"scale"},"scale: "+i())]),m(".form-group",{style:{position:"absolute",top:"30px",color:"white"}},[m("input[type=range]",{val:n(),id:"speed",min:-1,max:1,step:.1,oninput:function(t){return n(Number(t.target.value))}}),m("label",{"for":"speed"},"speed: "+n())]),m(".form-group",{style:{position:"absolute",top:"10px",left:"50%",color:"white"}},[m("button",{onclick:function(){return o(o()+.1)},id:"rotateXUp",style:{fontSize:"50px"}},"Up")]),m(".form-group",{style:{position:"absolute",bottom:"10px",left:"50%",color:"white"}},[m("button",{onclick:function(){return o(o()-.1)},id:"rotateXDown",style:{fontSize:"50px"}},"Down")]),m(".form-group",{style:{position:"absolute",left:"10px",color:"white"}},[m("button",{onclick:function(){return r(r()-100)},id:"pan-left",style:{fontSize:"50px"}},"Left")]),m(".form-group",{style:{position:"absolute",right:"10px",color:"white"}},[m("button",{onclick:function(){return r(r()+100)},id:"pan-right",style:{fontSize:"50px"}},"Right")])])}}};m.mount(o,{view:function(){return m(x,{w:a,h:f,scl:c,rotation:v,speed:p})}})}),require.register("___globals___",function(t,e,r){window.Stream=e("mithril-stream/stream.js"),window.m=e("mithril")})}(),require("___globals___"),require("initialize");
+(function() {
+  'use strict';
+
+  var globals = typeof global === 'undefined' ? self : global;
+  if (typeof globals.require === 'function') return;
+
+  var modules = {};
+  var cache = {};
+  var aliases = {};
+  var has = {}.hasOwnProperty;
+
+  var expRe = /^\.\.?(\/|$)/;
+  var expand = function(root, name) {
+    var results = [], part;
+    var parts = (expRe.test(name) ? root + '/' + name : name).split('/');
+    for (var i = 0, length = parts.length; i < length; i++) {
+      part = parts[i];
+      if (part === '..') {
+        results.pop();
+      } else if (part !== '.' && part !== '') {
+        results.push(part);
+      }
+    }
+    return results.join('/');
+  };
+
+  var dirname = function(path) {
+    return path.split('/').slice(0, -1).join('/');
+  };
+
+  var localRequire = function(path) {
+    return function expanded(name) {
+      var absolute = expand(dirname(path), name);
+      return globals.require(absolute, path);
+    };
+  };
+
+  var initModule = function(name, definition) {
+    var hot = hmr && hmr.createHot(name);
+    var module = {id: name, exports: {}, hot: hot};
+    cache[name] = module;
+    definition(module.exports, localRequire(name), module);
+    return module.exports;
+  };
+
+  var expandAlias = function(name) {
+    var val = aliases[name];
+    return (val && name !== val) ? expandAlias(val) : name;
+  };
+
+  var _resolve = function(name, dep) {
+    return expandAlias(expand(dirname(name), dep));
+  };
+
+  var require = function(name, loaderPath) {
+    if (loaderPath == null) loaderPath = '/';
+    var path = expandAlias(name);
+
+    if (has.call(cache, path)) return cache[path].exports;
+    if (has.call(modules, path)) return initModule(path, modules[path]);
+
+    throw new Error("Cannot find module '" + name + "' from '" + loaderPath + "'");
+  };
+
+  require.alias = function(from, to) {
+    aliases[to] = from;
+  };
+
+  var extRe = /\.[^.\/]+$/;
+  var indexRe = /\/index(\.[^\/]+)?$/;
+  var addExtensions = function(bundle) {
+    if (extRe.test(bundle)) {
+      var alias = bundle.replace(extRe, '');
+      if (!has.call(aliases, alias) || aliases[alias].replace(extRe, '') === alias + '/index') {
+        aliases[alias] = bundle;
+      }
+    }
+
+    if (indexRe.test(bundle)) {
+      var iAlias = bundle.replace(indexRe, '');
+      if (!has.call(aliases, iAlias)) {
+        aliases[iAlias] = bundle;
+      }
+    }
+  };
+
+  require.register = require.define = function(bundle, fn) {
+    if (bundle && typeof bundle === 'object') {
+      for (var key in bundle) {
+        if (has.call(bundle, key)) {
+          require.register(key, bundle[key]);
+        }
+      }
+    } else {
+      modules[bundle] = fn;
+      delete cache[bundle];
+      addExtensions(bundle);
+    }
+  };
+
+  require.list = function() {
+    var list = [];
+    for (var item in modules) {
+      if (has.call(modules, item)) {
+        list.push(item);
+      }
+    }
+    return list;
+  };
+
+  var hmr = globals._hmr && new globals._hmr(_resolve, require, modules, cache);
+  require._cache = cache;
+  require.hmr = hmr && hmr.wrap;
+  require.brunch = true;
+  globals.require = require;
+})();
+
+(function() {
+var global = typeof window === 'undefined' ? this : window;
+var __makeRelativeRequire = function(require, mappings, pref) {
+  var none = {};
+  var tryReq = function(name, pref) {
+    var val;
+    try {
+      val = require(pref + '/node_modules/' + name);
+      return val;
+    } catch (e) {
+      if (e.toString().indexOf('Cannot find module') === -1) {
+        throw e;
+      }
+
+      if (pref.indexOf('node_modules') !== -1) {
+        var s = pref.split('/');
+        var i = s.lastIndexOf('node_modules');
+        var newPref = s.slice(0, i).join('/');
+        return tryReq(name, newPref);
+      }
+    }
+    return none;
+  };
+  return function(name) {
+    if (name in mappings) name = mappings[name];
+    if (!name) return;
+    if (name[0] !== '.' && pref) {
+      var val = tryReq(name, pref);
+      if (val !== none) return val;
+    }
+    return require(name);
+  }
+};
+require.register("initialize.js", function(exports, require, module) {
+'use strict';
+
+document.addEventListener('DOMContentLoaded', function () {
+    require('sketch');
+});
+});
+
+require.register("model.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var range = function range(size) {
+  return [].concat(_toConsumableArray(Array(size).keys()));
+};
+
+var width = 600;
+var height = 600;
+var scl = 20;
+
+var w = 1400;
+var h = 1000;
+var flying = 0;
+var colOff = 0;
+var rowOff = 0;
+var terrain = [[]];
+var cols = range(width / scl);
+var rows = range(height / scl);
+
+var model = exports.model = {
+  scl: scl,
+  w: w,
+  h: h,
+  flying: flying,
+  colOff: colOff,
+  rowOff: rowOff,
+  terrain: terrain,
+  cols: cols,
+  rows: rows
+};
+});
+
+;require.register("sketch.js", function(exports, require, module) {
+"use strict";
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var range = function range(size) {
+  return [].concat(_toConsumableArray(Array(size).keys()));
+};
+
+var root = document.getElementById("mithril-dom");
+
+var width = 1000;
+var height = 1000;
+var w = Stream(1400);
+var h = Stream(1000);
+var scl = Stream(20);
+var flying = Stream(0);
+var speed = Stream(-0.2);
+var colOff = Stream(0);
+var rowOff = Stream(0);
+var terrain = Stream([[]]);
+var cols = range(w() / scl());
+var rows = range(h() / scl());
+var rotation = Stream(Math.PI / 3);
+
+var init = function init() {
+  return new p5(function (sketch) {
+    sketch.preload = function () {};
+
+    sketch.setup = function () {
+      sketch.createCanvas(width, height, sketch.WEBGL);
+
+      rows.map(function (row) {
+        cols.map(function (col) {
+          terrain()[col] = [];
+          terrain()[col][row] = 0;
+        });
+      });
+    };
+
+    sketch.draw = function () {
+      sketch.rotateX(rotation());
+      sketch.translate(-w() / 2, -h() / 2);
+      sketch.background("#81D4FA");
+
+      flying(flying() + speed());
+
+      rowOff(flying());
+      rows.map(function (row) {
+        colOff(0);
+        cols.map(function (col) {
+          terrain()[col][row] = sketch.map(sketch.noise(colOff(), rowOff()), 0, 1, -100, 100);
+          colOff(colOff() + 0.21);
+        });
+        rowOff(rowOff() + 0.21);
+      });
+
+      rows.map(function (row) {
+        sketch.beginShape(sketch.TRIANGLE_STRIP);
+        cols.map(function (col) {
+          sketch.vertex(col * scl(), row * scl(), terrain()[col][row]);
+          sketch.vertex(col * scl(), (row + 1) * scl(), terrain()[col][row + 1]);
+          if (terrain()[col][row] < -60) {
+            sketch.fill("#01579B");
+          } else if (terrain()[col][row] > -60 && terrain()[col][row] < -50) {
+            sketch.fill("#1B5E20");
+          } else if (terrain()[col][row] > -50 && terrain()[col][row] < -40) {
+            sketch.fill("#1B5E20");
+          } else if (terrain()[col][row] > -40 && terrain()[col][row] < -30) {
+            sketch.fill("#2E7D32");
+          } else if (terrain()[col][row] > -30 && terrain()[col][row] < -20) {
+            sketch.fill("#388E3C");
+          } else if (terrain()[col][row] > -20 && terrain()[col][row] < -10) {
+            sketch.fill("#43A047");
+          } else if (terrain()[col][row] > -10 && terrain()[col][row] < -0) {
+            sketch.fill("#4CAF50");
+          } else if (terrain()[col][row] > -0 && terrain()[col][row] < 10) {
+            sketch.fill("#66BB6A");
+          } else if (terrain()[col][row] > 10 && terrain()[col][row] < 20) {
+            sketch.fill("#81C784");
+          } else if (terrain()[col][row] > 20 && terrain()[col][row] < 30) {
+            sketch.fill("#2ecc71");
+          } else if (terrain()[col][row] > 30 && terrain()[col][row] < 40) {
+            sketch.fill("#A5D6A7");
+          } else if (terrain()[col][row] > 40 && terrain()[col][row] < 50) {
+            sketch.fill("#C8E6C9");
+          } else if (terrain()[col][row] > 50 && terrain()[col][row] < 100) {
+            sketch.fill("#ecf0f1");
+          }
+        });
+        sketch.endShape();
+        m.redraw();
+      });
+    };
+  });
+};
+
+var App = function App() {
+  return {
+    oninit: init(),
+    view: function view(_ref) {
+      var _ref$attrs = _ref.attrs,
+          w = _ref$attrs.w,
+          speed = _ref$attrs.speed,
+          scl = _ref$attrs.scl,
+          rotation = _ref$attrs.rotation;
+
+      return m(".mithril", [m(".form-group", { style: { position: "absolute", top: "10px", color: "white" } }, [m("input[type=range]", {
+        val: scl(),
+        id: "scale",
+        min: 0,
+        max: 30,
+        step: 0.1,
+        oninput: function oninput(e) {
+          return scl(e.target.value);
+        }
+      }), m("label", { for: "scale" }, "scale: " + scl())]), m(".form-group", { style: { position: "absolute", top: "30px", color: "white" } }, [m("input[type=range]", {
+        val: speed(),
+        id: "speed",
+        min: -1,
+        max: 1,
+        step: 0.1,
+        oninput: function oninput(e) {
+          return speed(Number(e.target.value));
+        }
+      }), m("label", { for: "speed" }, "speed: " + speed())]), m(".form-group", {
+        style: {
+          position: "absolute",
+          top: "10px",
+          left: "50%",
+          color: "white"
+        }
+      }, [m("button", {
+        onclick: function onclick() {
+          return rotation(rotation() + 0.1);
+        },
+        id: "rotateXUp",
+        style: {
+          fontSize: "50px"
+        }
+      }, "Up")]), m(".form-group", {
+        style: {
+          position: "absolute",
+          bottom: "10px",
+          left: "50%",
+          color: "white"
+        }
+      }, [m("button", {
+        onclick: function onclick() {
+          return rotation(rotation() - 0.1);
+        },
+        id: "rotateXDown",
+        style: {
+          fontSize: "50px"
+        }
+      }, "Down")]), m(".form-group", {
+        style: {
+          position: "absolute",
+          left: "10px",
+          color: "white"
+        }
+      }, [m("button", {
+        onclick: function onclick() {
+          return w(w() - 100);
+        },
+        id: "pan-left",
+        style: {
+          fontSize: "50px"
+        }
+      }, "Left")]), m(".form-group", {
+        style: {
+          position: "absolute",
+          right: "10px",
+          color: "white"
+        }
+      }, [m("button", {
+        onclick: function onclick() {
+          return w(w() + 100);
+        },
+        id: "pan-right",
+        style: {
+          fontSize: "50px"
+        }
+      }, "Right")])]);
+    }
+  };
+};
+
+m.mount(root, { view: function view() {
+    return m(App, { w: w, h: h, scl: scl, rotation: rotation, speed: speed });
+  } });
+});
+
+;require.register("___globals___", function(exports, require, module) {
+  
+
+// Auto-loaded modules from config.npm.globals.
+window.Stream = require("mithril-stream/stream.js");
+window.m = require("mithril");
+
+
+});})();require('___globals___');
+
+require('initialize');
+//# sourceMappingURL=app.js.map

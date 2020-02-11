@@ -2,8 +2,8 @@ const range = (size) => [...Array(size).keys()]
 
 let root = document.getElementById("mithril-dom")
 
-let width = 600
-let height = 600
+let width = 1000
+let height = 1000
 let w = Stream(1400)
 let h = Stream(1000)
 let scl = Stream(20)
